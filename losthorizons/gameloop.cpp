@@ -12,6 +12,10 @@ Gameloop::Gameloop(IrrlichtDevice *graphics, KeyListener *receiver) : currentSce
 	playerCam = graphics->getSceneManager()->addCameraSceneNode();
 }
 
+Gameloop::~Gameloop()
+{
+}
+
 void Gameloop::run()
 {
 	playerControl();

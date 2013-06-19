@@ -97,6 +97,8 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="turret.h" />
+    <ClInclude Include="ui\menuwindow.h" />
+    <ClInclude Include="ui\optionmenu.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="baseapplication.cpp" />
@@ -107,6 +109,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="ui\optionmenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="losthorizons.rc" />

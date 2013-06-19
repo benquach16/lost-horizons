@@ -27,9 +27,9 @@ struct Config
 		// Video
 		unsigned iResolutionX;
 		unsigned iResolutionY;
-		unsigned bBits;
+		unsigned iBits;
 		bool bFullScreen;
-		bool bVsync;
+		//bool bVsync;
 		//bool bShaders;
 
 		// Audio

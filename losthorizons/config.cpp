@@ -1,6 +1,6 @@
+#include "windows.h"
 #include "config.h"
 #include "lib/ini_io.h"
-
 Config gConfig;
 
 
@@ -19,9 +19,11 @@ void Config::Load(const char *iniFileName)
 
 	IniFile iniFile;
 	if (!iniFile.Load(iniFileName)) {
-		// log here in debug mode
-		// Continue anyway; defaults will be used
 	}
+
+	HDC dc = GetDC(NULL);
+	iBits = GetDeviceCaps(dc, BITSPIXEL);
+	ReleaseDC(NULL, dc);
 
 	IniFile::Section *general = iniFile.GetOrCreateSection("General");
 
@@ -37,9 +39,8 @@ void Config::Load(const char *iniFileName)
 	graphics->Get("ShowFPSCounter", &bShowFPSCounter, false);
 	graphics->Get("ResolutionX", &iResolutionX, 1024);
 	graphics->Get("ResolutionY", &iResolutionY, 768);
-	graphics->Get("Bits", &bBits, 32);
 	graphics->Get("FullScreen", &bFullScreen, false);
-	graphics->Get("Vsync", &bVsync, false);
+//	graphics->Get("Vsync", &bVsync, false);
 //	graphics->Get("Shaders", &bShaders, true);
 
 	IniFile::Section *sound = iniFile.GetOrCreateSection("Sound");
@@ -53,9 +54,8 @@ void Config::Save()
 	if (iniFilename_.size() && gConfig.bSaveSettings) {
 		IniFile iniFile;
 		if (!iniFile.Load(iniFilename_.c_str())) {
-			// log here in debug mode
 		}
-
+		
 		IniFile::Section *general = iniFile.GetOrCreateSection("General");
 		
 		// Next time won't be the first run
@@ -71,25 +71,22 @@ void Config::Save()
 		IniFile::Section *graphics = iniFile.GetOrCreateSection("Graphics");
 
 		graphics->Set("ShowFPSCounter", bShowFPSCounter);
-		graphics->Set("FullScreen", bFullScreen);
 		graphics->Set("ResolutionX", iResolutionX);
 		graphics->Set("ResolutionY", iResolutionY);
 		graphics->Set("FullScreen", bFullScreen);
-		graphics->Set("Vsync", bVsync);
+//		graphics->Set("Vsync", bVsync);
 //		graphics->Set("Shaders", bShaders);
 
 		IniFile::Section *sound = iniFile.GetOrCreateSection("Sound");
 
 		sound->Set("Music", iMusic);
 		sound->Set("SFX", iSFX);
-
+		
 		if (!iniFile.Save(iniFilename_.c_str())) {
 			return;
 		}
-		// log here in debug mode
 		// config saved
 	} else {
-		// log here in debug mode
 		// not saving config
 	}
 }

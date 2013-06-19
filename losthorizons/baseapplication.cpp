@@ -20,23 +20,16 @@ BaseApplication::~BaseApplication()
 
 void BaseApplication::init()
 {
-	graphics = createDevice(EDT_DIRECT3D9,
-		dimension2du(gConfig.iResolutionX, gConfig.iResolutionY),
-		gConfig.bBits,
-		gConfig.bFullScreen,
-		false,
-		false,
-		receiver);
-		
-	if(!graphics)
-	{
-		std::cerr << "Error creating device";
-		std::exit(1);
-	}
+	buildGraphics();
 	game = new Gameloop(graphics, receiver);
-	graphics->setWindowCaption(L"application");
-	
 	run();
+}
+
+void BaseApplication::restart()
+{
+	IrrlichtDevice *oldGraphics = graphics;
+	buildGraphics();
+	oldGraphics->drop();
 }
 
 void BaseApplication::run()
@@ -52,5 +45,32 @@ void BaseApplication::run()
 		graphics->getGUIEnvironment()->drawAll();
 
 		graphics->getVideoDriver()->endScene();
+
+		if (resolutionX != gConfig.iResolutionX ||
+			resolutionY != gConfig.iResolutionY ||
+			fullscreen != gConfig.bFullScreen) {
+			restart();
+		}
 	}
+}
+
+void BaseApplication::buildGraphics()
+{
+	graphics = createDevice(EDT_DIRECT3D9,
+		dimension2du(gConfig.iResolutionX, gConfig.iResolutionY),
+		gConfig.iBits,
+		gConfig.bFullScreen,
+		false,
+		false,
+		receiver);
+		
+	if(!graphics)
+	{
+		std::cerr << "Error creating device";
+		std::exit(1);
+	}
+
+	resolutionX = gConfig.iResolutionX;
+	resolutionY = gConfig.iResolutionY;
+	fullscreen = gConfig.bFullScreen;
 }
